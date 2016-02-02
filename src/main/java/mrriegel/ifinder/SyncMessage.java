@@ -26,7 +26,7 @@ public class SyncMessage implements IMessage,
 
 	public SyncMessage(EntityPlayer player) {
 		ItemFinder.lis = new ArrayList<BlockPos>();
-		int range = 16;
+		int range = ItemFinder.range;
 		for (int i = -range; i <= range; i++)
 			for (int j = -range; j <= range; j++)
 				for (int k = -range; k <= range; k++) {
@@ -54,7 +54,9 @@ public class SyncMessage implements IMessage,
 		mainThread.addScheduledTask(new Runnable() {
 			@Override
 			public void run() {
-				ItemFinder.lis = message.lis;
+//				if (!message.lis.containsAll(ItemFinder.lis)
+//						|| !ItemFinder.lis.containsAll(message.lis))
+					ItemFinder.lis = new ArrayList<BlockPos>(message.lis);
 			}
 		});
 		return null;
