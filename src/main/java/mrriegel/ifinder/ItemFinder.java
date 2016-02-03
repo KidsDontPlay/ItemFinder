@@ -1,19 +1,13 @@
 package mrriegel.ifinder;
 
-import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.KeyBinding;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -21,13 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 @Mod(modid = ItemFinder.MODID, version = ItemFinder.VERSION, name = ItemFinder.MODNAME)
 public class ItemFinder {
@@ -69,6 +59,13 @@ public class ItemFinder {
 				Side.SERVER);
 		INSTANCE.registerMessage(SyncMessage.class, SyncMessage.class, 1,
 				Side.CLIENT);
+//		List<BlockPos> li = Arrays.asList(new BlockPos[] {
+//				new BlockPos(12, 3, -33), new BlockPos(-777, 1000, 0) });
+//		System.out.println("lis: " + li);
+//		String s = new Gson().toJson(li);
+//		System.out.println(new Gson().fromJson(s,
+//				new TypeToken<List<BlockPos>>() {
+//				}.getType()));
 	}
 
 	// @SubscribeEvent

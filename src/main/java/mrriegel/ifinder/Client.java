@@ -55,6 +55,7 @@ public class Client {
 		long c = (System.currentTimeMillis() / 15l) % 360l;
 		Color color = ItemFinder.color == -1 ? Color.getHSBColor(c / 360f, 1f,
 				1f) : new Color(ItemFinder.color);
+		
 		for (BlockPos p : ItemFinder.lis) {
 			float x = p.getX(), y = p.getY(), z = p.getZ();
 //			RenderHelper.disableStandardItemLighting();

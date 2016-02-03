@@ -54,9 +54,9 @@ public class SyncMessage implements IMessage,
 		mainThread.addScheduledTask(new Runnable() {
 			@Override
 			public void run() {
-//				if (!message.lis.containsAll(ItemFinder.lis)
-//						|| !ItemFinder.lis.containsAll(message.lis))
-					ItemFinder.lis = new ArrayList<BlockPos>(message.lis);
+				// if (!message.lis.containsAll(ItemFinder.lis)
+				// || !ItemFinder.lis.containsAll(message.lis))
+				ItemFinder.lis = new ArrayList<BlockPos>(message.lis);
 			}
 		});
 		return null;
@@ -64,14 +64,22 @@ public class SyncMessage implements IMessage,
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.lis = new Gson().fromJson(ByteBufUtils.readUTF8String(buf),
-				new TypeToken<List<BlockPos>>() {
-				}.getType());
+		this.lis = new ArrayList<BlockPos>();
+		int size = buf.readInt();
+		for (int i = 0; i < size; i++) {
+			this.lis.add(new BlockPos(buf.readInt(), buf.readInt(), buf
+					.readInt()));
+		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeUTF8String(buf, new Gson().toJson(this.lis));
+		buf.writeInt(this.lis.size());
+		for (BlockPos p : this.lis) {
+			buf.writeInt(p.getX());
+			buf.writeInt(p.getY());
+			buf.writeInt(p.getZ());
+		}
 	}
 
 }
