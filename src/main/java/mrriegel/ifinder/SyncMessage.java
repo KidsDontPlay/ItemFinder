@@ -25,7 +25,7 @@ public class SyncMessage implements IMessage,
 	}
 
 	public SyncMessage(EntityPlayer player) {
-		ItemFinder.lis = new ArrayList<BlockPos>();
+		lis = new ArrayList<BlockPos>();
 		int range = ItemFinder.range;
 		for (int i = -range; i <= range; i++)
 			for (int j = -range; j <= range; j++)
@@ -39,13 +39,12 @@ public class SyncMessage implements IMessage,
 							if (inv.getStackInSlot(ii) != null
 									&& inv.getStackInSlot(ii).isItemEqual(
 											player.getHeldItem())) {
-								ItemFinder.lis.add(pos);
+								lis.add(pos);
 								break;
 							}
 						}
 					}
 				}
-		lis = new ArrayList<BlockPos>(ItemFinder.lis);
 	}
 
 	@Override
@@ -56,7 +55,7 @@ public class SyncMessage implements IMessage,
 			public void run() {
 				// if (!message.lis.containsAll(ItemFinder.lis)
 				// || !ItemFinder.lis.containsAll(message.lis))
-				ItemFinder.lis = new ArrayList<BlockPos>(message.lis);
+				ItemFinder.instance.lis = new ArrayList<BlockPos>(message.lis);
 			}
 		});
 		return null;

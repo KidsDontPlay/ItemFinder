@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
 public class Client {
 	public static KeyBinding light = new KeyBinding(ItemFinder.MODNAME,
 			Keyboard.KEY_F, ItemFinder.MODNAME);
-	
+
 	@SubscribeEvent
 	public void tick(PlayerTickEvent e) {
 		if (e.player.worldObj.isRemote
@@ -45,20 +45,20 @@ public class Client {
 				+ (player.posY - player.lastTickPosY) * event.partialTicks;
 		double doubleZ = player.lastTickPosZ
 				+ (player.posZ - player.lastTickPosZ) * event.partialTicks;
-		GlStateManager.pushAttrib();
+
 		GlStateManager.pushMatrix();
 
-//		GlStateManager.disableTexture2D();
-//		GlStateManager.disableLighting();
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableLighting();
 		GlStateManager.translate(-doubleX, -doubleY, -doubleZ);
 		// code
 		long c = (System.currentTimeMillis() / 15l) % 360l;
 		Color color = ItemFinder.color == -1 ? Color.getHSBColor(c / 360f, 1f,
 				1f) : new Color(ItemFinder.color);
-		
-		for (BlockPos p : ItemFinder.lis) {
+
+		for (BlockPos p : ItemFinder.instance.lis) {
 			float x = p.getX(), y = p.getY(), z = p.getZ();
-//			RenderHelper.disableStandardItemLighting();
+			// RenderHelper.enableStandardItemLighting();
 			Tessellator tessellator = Tessellator.getInstance();
 			WorldRenderer renderer = tessellator.getWorldRenderer();
 			renderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
@@ -104,15 +104,14 @@ public class Client {
 			renderer.pos(x, y, z + offset).endVertex();
 			renderer.pos(x, y + offset, z + offset).endVertex();
 			tessellator.draw();
-//			RenderHelper.enableStandardItemLighting();
-			
+			// RenderHelper.disableStandardItemLighting();
+
 		}
 
-//		GlStateManager.enableTexture2D();
-//		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableLighting();
 		GlStateManager.color(1f, 1f, 1f, 1f);
 
 		GlStateManager.popMatrix();
-		GlStateManager.popAttrib();
 	}
 }
