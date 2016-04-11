@@ -5,12 +5,11 @@ import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -20,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Client {
 	public static KeyBinding light = new KeyBinding(ItemFinder.MODNAME,
-			Keyboard.KEY_F, ItemFinder.MODNAME);
+			Keyboard.KEY_G, ItemFinder.MODNAME);
 
 	@SubscribeEvent
 	public void tick(PlayerTickEvent e) {
@@ -36,15 +35,15 @@ public class Client {
 		if (!(Client.light.isKeyDown() ^ ItemFinder.alwaysOn))
 			return;
 		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-		if (player.getHeldItem() == null)
+		if (player.getHeldItemMainhand() == null)
 			return;
 
 		double doubleX = player.lastTickPosX
-				+ (player.posX - player.lastTickPosX) * event.partialTicks;
+				+ (player.posX - player.lastTickPosX) * event.getPartialTicks();
 		double doubleY = player.lastTickPosY
-				+ (player.posY - player.lastTickPosY) * event.partialTicks;
+				+ (player.posY - player.lastTickPosY) * event.getPartialTicks();
 		double doubleZ = player.lastTickPosZ
-				+ (player.posZ - player.lastTickPosZ) * event.partialTicks;
+				+ (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
 
 		GlStateManager.pushMatrix();
 
@@ -60,7 +59,7 @@ public class Client {
 			float x = p.getX(), y = p.getY(), z = p.getZ();
 			// RenderHelper.enableStandardItemLighting();
 			Tessellator tessellator = Tessellator.getInstance();
-			WorldRenderer renderer = tessellator.getWorldRenderer();
+			VertexBuffer renderer = tessellator.getBuffer();
 			renderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 			GlStateManager.color(color.getRed() / 255f,
 					color.getGreen() / 255f, color.getBlue() / 255f, 1f);

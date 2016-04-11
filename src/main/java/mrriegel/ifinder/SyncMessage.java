@@ -1,18 +1,15 @@
 package mrriegel.ifinder;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -38,7 +35,7 @@ public class SyncMessage implements IMessage,
 						for (int ii = 0; ii < inv.getSizeInventory(); ii++) {
 							if (inv.getStackInSlot(ii) != null
 									&& inv.getStackInSlot(ii).isItemEqual(
-											player.getHeldItem())) {
+											player.getHeldItemMainhand())) {
 								lis.add(pos);
 								break;
 							}

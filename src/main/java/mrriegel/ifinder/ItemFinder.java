@@ -3,7 +3,7 @@ package mrriegel.ifinder;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
