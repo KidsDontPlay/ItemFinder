@@ -5,14 +5,19 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Sets;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class SyncMessage implements IMessage,
 		IMessageHandler<SyncMessage, IMessage> {
@@ -29,13 +34,35 @@ public class SyncMessage implements IMessage,
 				for (int k = -range; k <= range; k++) {
 					BlockPos pos = new BlockPos(i + player.posX, j
 							+ player.posY, k + player.posZ);
-					if (player.worldObj.getTileEntity(pos) instanceof IInventory) {
+					TileEntity t = player.worldObj.getTileEntity(pos);
+					if (t instanceof IInventory) {
 						IInventory inv = (IInventory) player.worldObj
 								.getTileEntity(pos);
 						for (int ii = 0; ii < inv.getSizeInventory(); ii++) {
 							if (inv.getStackInSlot(ii) != null
-									&& inv.getStackInSlot(ii).isItemEqual(
-											player.getHeldItemMainhand())) {
+									&& (inv.getStackInSlot(ii).isItemEqual(
+											player.getHeldItemMainhand()) || inv
+											.getStackInSlot(ii)
+											.isItemEqual(
+													player.getHeldItemOffhand()))) {
+								lis.add(pos);
+								break;
+							}
+						}
+					} else if (t != null
+							&& t.hasCapability(
+									CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+									null)) {
+						IItemHandler inv = t.getCapability(
+								CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+								null);
+						for (int ii = 0; ii < inv.getSlots(); ii++) {
+							if (inv.getStackInSlot(ii) != null
+									&& (inv.getStackInSlot(ii).isItemEqual(
+											player.getHeldItemMainhand()) || inv
+											.getStackInSlot(ii)
+											.isItemEqual(
+													player.getHeldItemOffhand()))) {
 								lis.add(pos);
 								break;
 							}
@@ -52,7 +79,7 @@ public class SyncMessage implements IMessage,
 			public void run() {
 				// if (!message.lis.containsAll(ItemFinder.lis)
 				// || !ItemFinder.lis.containsAll(message.lis))
-				ItemFinder.instance.lis = new ArrayList<BlockPos>(message.lis);
+				ItemFinder.instance.lis = Sets.newHashSet(message.lis);
 			}
 		});
 		return null;

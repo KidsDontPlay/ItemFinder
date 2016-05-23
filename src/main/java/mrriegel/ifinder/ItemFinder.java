@@ -1,7 +1,6 @@
 package mrriegel.ifinder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +14,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.google.common.collect.Sets;
+
 @Mod(modid = ItemFinder.MODID, version = ItemFinder.VERSION, name = ItemFinder.MODNAME)
 public class ItemFinder {
 	public static final String MODID = "ifinder";
@@ -27,7 +28,7 @@ public class ItemFinder {
 	public static final SimpleNetworkWrapper INSTANCE = new SimpleNetworkWrapper(
 			ItemFinder.MODID);
 
-	public List<BlockPos> lis = new ArrayList<BlockPos>();
+	public Set<BlockPos> lis = Sets.newHashSet();
 	public static long last = 0;
 
 	public static Configuration config;
